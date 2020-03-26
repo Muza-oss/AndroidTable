@@ -15,9 +15,14 @@ import java.util.*;
 import java.math.*;
 import android.graphics.pdf.*;
 import android.graphics.*;
+import com.muza.mytabel.Utils.PermissionUtil;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 
 public class MainActivity extends  Activity implements OnClickListener
 {
+	private static final int PERMISSION_REQUEST_ID = 4;
+	
 	final String LOG_TAG = "myLogs";
 
 	final String FILENAME = "file";
@@ -37,11 +42,18 @@ public class MainActivity extends  Activity implements OnClickListener
 	
 	private EditText editText1;
 	private TextView tvInfo;
+	
+	private Bitmap bitmap;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+		PermissionUtil.checkAndRequest(this, PERMISSION_REQUEST_ID);
+		StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+		StrictMode.setVmPolicy(builder.build());
+		builder.detectFileUriExposure();
 		
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		tblLayout = findViewById(R.id.tableLayout);
@@ -102,6 +114,19 @@ public class MainActivity extends  Activity implements OnClickListener
 		readTable();
 		super.onResume();
 	}
+	
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+		if (requestCode == PERMISSION_REQUEST_ID &&
+			grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+			grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+			Toast.makeText(this, "PermissionResult ",Toast.LENGTH_SHORT).show();	
+
+        } else {
+            Toast.makeText(this, R.string.no_external_permissions, Toast.LENGTH_LONG).show();
+        }
+	}
 
 	@Override
 	public void onClick(View v)
@@ -118,7 +143,9 @@ public class MainActivity extends  Activity implements OnClickListener
 				
 			case R.id.mainAddRow:
 				addRow();
-				createPdf("test");
+				//createPdf("test");
+				bitmap = loadBitmapFromView(tblLayout, tblLayout.getWidth(), tblLayout.getHeight());
+                createPdf();
 				break;
 				
 			case R.id.mainDellRow:
@@ -332,6 +359,84 @@ public class MainActivity extends  Activity implements OnClickListener
 			// close the document
 			document.close();
 		}
+		
+	public static Bitmap loadBitmapFromView(View v, int width, int height) {
+        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.draw(c);
+
+        return b;
+    }
+	
+	private void createPdf(){
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        //  Display display = wm.getDefaultDisplay();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		
+        float hight = tblLayout.getWidth();// Math.max(displaymetrics.heightPixels, displaymetrics.widthPixels); ;
+        float width = tblLayout.getHeight(); // Math.min(displaymetrics.widthPixels, displaymetrics.heightPixels); ;
+
+        int convertHighet = (int) width, convertWidth = (int) hight;
+tvInfo.append(" h= " + hight + " w= " + width + " ");
+//        Resources mResources = getResources();
+//        Bitmap bitmap = BitmapFactory.decodeResource(mResources, R.drawable.screenshot);
+
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(convertWidth, convertHighet, 1).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+
+        Canvas canvas = page.getCanvas();
+
+        Paint paint = new Paint();
+        canvas.drawPaint(paint);
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, convertWidth, convertHighet, true);
+
+        paint.setColor(Color.BLUE);
+        canvas.drawBitmap(bitmap, 0, 0 , null);
+        document.finishPage(page);
+
+        // write the document content
+        String targetPdf = "/sdcard/pdffromScroll.pdf";
+        File filePath;
+        filePath = new File(targetPdf);
+        try {
+            document.writeTo(new FileOutputStream(filePath));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Something wrong: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        // close the document
+        document.close();
+        Toast.makeText(this, "PDF of Scroll is created!!!", Toast.LENGTH_SHORT).show();
+
+        openGeneratedPDF();
+
+    }
+
+    private void openGeneratedPDF(){
+		String directory_path = Environment.getExternalStorageDirectory().getPath();
+        File file = new File(directory_path+"/pdffromScroll.pdf");
+        if (file.exists())
+        {
+            Intent intent=new Intent(Intent.ACTION_VIEW);
+            Uri uri = Uri.fromFile(file);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            try
+            {
+                startActivity(intent);
+            }
+            catch(ActivityNotFoundException e)
+            {
+                Toast.makeText(this, "No Application available to view pdf", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 		
 }
 

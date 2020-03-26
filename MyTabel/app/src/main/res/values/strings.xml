@@ -2,6 +2,6 @@
 <resources>
 
     <string name="app_name">MyTabel</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="no_external_permissions">no external permissions!</string>
 
 </resources>
