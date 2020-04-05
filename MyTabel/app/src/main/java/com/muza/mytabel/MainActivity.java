@@ -36,7 +36,7 @@ public class MainActivity extends  Activity implements OnClickListener {
 	final String DIR_SD = "MyFiles";
 	final String FILENAME_SD = "fileSD";
 
-	private int ROW = 0;
+	private int curentRow = 0;
 	private TableLayout tblLayout = null;
 	private TableRow 	tableRow  = null;
 
