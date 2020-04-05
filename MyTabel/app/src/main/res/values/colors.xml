@@ -30,7 +30,25 @@
     <color name="solid_green">#f0f0</color>
     <color name="solid_yellow">#ffffff00</color>
     <color name="purply">#ff884488</color>
-
+	
+	<color name="datepickerBackground">#ffffff</color>
+    <color name="datepickerText">#000000</color>
+    <color name="datepickerSelectedValue">#3770e4</color>
+    <color name="datepickerSelectedValueShadow">#ffffff</color>
+    <color name="datapickerGradientStart">#55000000</color>
+    <color name="datapickerSelectedValueeLineG1">#22ffffff</color>
+    <color name="datapickerSelectedValueeLineG2">#227d98ff</color>
+    <color name="datapickerSelectedValueeLineG3">#336585ff</color>
+    <color name="datapickerSelectedValueeLineG4">#336d8dff</color>
+    <color name="datapicketSelectedValueBorder">#9a9da4</color>
+    <color name="datapicketSelectedBorderTop">#f8fcff</color>
+    <color name="datapicketSelectedBorderBttom">#a1a7bf</color>
+    <color name="datapickerBlackLines">#000000</color>
+    <color name="datapickerGrayLines">#cfcdd8</color>
+	
+	<color name="tablelayoutBackground">#FFA17AC1</color>
+	<color name="tableRowBackground">#FF4D4E4F</color>
+	
     <!-- A custom theme that is a variation on the light them with a different
          background color. -->
     <color name="custom_theme_color">#b0b0ff</color>

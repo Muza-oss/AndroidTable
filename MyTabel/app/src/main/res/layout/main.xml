@@ -23,10 +23,50 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/tableLayout"
-				android:background="#A17AC1"
+				android:background="@color/tablelayoutBackground"
 				android:gravity="center"/>
 
 		</ScrollView>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="4.0">
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker1"
+			android:layout_weight="1.0"
+			android:background="#FF224DBA"/>
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker2"
+			android:layout_weight="1.0"/>
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Set"
+			android:id="@+id/mainButtonSetPicker"
+			android:layout_weight="1.0"/>
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker3"
+			android:layout_weight="1.0"/>
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker4"
+			android:layout_weight="1.0"/>
 
 	</LinearLayout>
 

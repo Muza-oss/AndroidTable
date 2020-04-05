@@ -18,11 +18,17 @@ import android.graphics.*;
 import com.muza.mytabel.Utils.PermissionUtil;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import com.muza.mytabel.Utils.DataPicker;
+import android.view.ViewDebug.IntToString;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.view.ViewTreeObserver.OnTouchModeChangeListener;
 
-public class MainActivity extends  Activity implements OnClickListener
-{
+public class MainActivity extends  Activity implements OnClickListener {
 	private static final int PERMISSION_REQUEST_ID = 4;
-	
+
+	final Context context = this;
+
 	final String LOG_TAG = "myLogs";
 
 	final String FILENAME = "file";
@@ -31,32 +37,44 @@ public class MainActivity extends  Activity implements OnClickListener
 	final String FILENAME_SD = "fileSD";
 
 	private int ROW = 0;
-
 	private TableLayout tblLayout = null;
-	private TableRow tableRow = null;
-	
+	private TableRow 	tableRow  = null;
+
 	private Button btnSet;
 	private Button btnClear;
 	private Button btnAddRow;
 	private Button btnDellRow;
-	
+	private Button btnSetPicker;
+
+	private NumberPicker np1;
+	private NumberPicker np2;
+	private NumberPicker np3;
+	private NumberPicker np4;
+
 	private EditText editText1;
 	private TextView tvInfo;
-	
+
 	private Bitmap bitmap;
-	
+
+	private AlertDialog.Builder mDialogBuilder;
+	private AlertDialog alertDialog;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 		PermissionUtil.checkAndRequest(this, PERMISSION_REQUEST_ID);
 		StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
 		StrictMode.setVmPolicy(builder.build());
 		builder.detectFileUriExposure();
-		
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		tblLayout = findViewById(R.id.tableLayout);
+
+
 
 		btnSet = findViewById(R.id.mainButtonSet);
 		btnSet.setOnClickListener(this);
@@ -66,62 +84,151 @@ public class MainActivity extends  Activity implements OnClickListener
 		btnAddRow.setOnClickListener(this);
 		btnDellRow = findViewById(R.id.mainDellRow);
 		btnDellRow.setOnClickListener(this);
-		
-		editText1 = findViewById(R.id.mainEditText1);
+		btnSetPicker = findViewById(R.id.mainButtonSetPicker);
+		btnSetPicker.setOnClickListener(this);
+
+	    np1 = (NumberPicker) findViewById(R.id.mainNumberPicker1);  
+        np1.setMinValue(1);
+        np1.setMaxValue(24);
+		// np1.setWrapSelectorWheel(true);
+
+		np2 = (NumberPicker) findViewById(R.id.mainNumberPicker2);  
+        np2.setMinValue(0);
+        np2.setMaxValue(59);
+		//  np2.setWrapSelectorWheel(true);
+
+		np3 = (NumberPicker) findViewById(R.id.mainNumberPicker3);  
+        np3.setMinValue(1);
+        np3.setMaxValue(24);
+		//   np3.setWrapSelectorWheel(true);
+
+		np4 = (NumberPicker) findViewById(R.id.mainNumberPicker4);  
+        np4.setMinValue(0);
+        np4.setMaxValue(59);
+		//   np4.setWrapSelectorWheel(true);
+
 		tvInfo = findViewById(R.id.mainTextView1);
-		editText1.addTextChangedListener(new TextWatcher(){
-				@Override
-				public void afterTextChanged(Editable s) {
-					// Прописываем то, что надо выполнить после изменения текста
-					//setTable();
-					
+		//Set TextView text color
+        tvInfo.setTextColor(Color.parseColor("#ffd32b3b"));
+
+		editText1 = findViewById(R.id.mainEditText1);
+		/*editText1.addTextChangedListener(new TextWatcher(){
+		 @Override
+		 public void afterTextChanged(Editable s) {
+		 // Прописываем то, что надо выполнить после изменения текста
+		 //setTable();
+
+		 }
+
+		 @Override
+		 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+		 }
+
+		 @Override
+		 public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+		 }
+		 });*/
+		editText1.addOnLayoutChangeListener(new OnLayoutChangeListener(){
+				public void onLayoutChange(View v, int left, int top, int right, int bottom,
+										   int oldLeft, int oldTop, int oldRight, int oldBottom) {
+					//tvInfo.setText("hhh");
 				}
 
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				
-					
-				}
-
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {
-					
-				}
 			});
-
 		editText1.setOnKeyListener(new OnKeyListener() {
 				public boolean onKey(View view, int keyCode, KeyEvent event) {
-				   if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-						
+					if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+
 						addRow();
 					    editText1.setText("");
 					    //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					    //imm.showSoftInput(editText1, InputMethodManager.SHOW_FORCED);
 					    //editText1.requestFocus();
-						
+
 						return true;
 					} else {
 						return false;
 					}
 				}
 			});
-		editText1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_TEXT);
+
+
+		//Получаем вид с файла prompt.xml, который применим для диалогового окна:
+		LayoutInflater li = LayoutInflater.from(context);
+		View promptsView = li.inflate(R.layout.prompt, null);
+
+		//Создаем AlertDialog
+	    mDialogBuilder = new AlertDialog.Builder(context);
+
+		//Настраиваем prompt.xml для нашего AlertDialog:
+		mDialogBuilder.setView(promptsView);
+
+		//Настраиваем отображение поля для ввода текста в открытом диалоге:
+		final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
+
+		//Настраиваем сообщение в диалоговом окне:
+		mDialogBuilder
+			.setCancelable(false)
+			.setPositiveButton("OK",
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					//Вводим текст и отображаем в строке ввода на основном экране:
+					editText1.setText(userInput.getText());
+					final int count = tableRow.getChildCount();
+					for (int i = 0; i < count; i++) {
+						final TextView child = (TextView) tableRow.getChildAt(i);
+						String text = child.getText().toString(); // текст, что там дальше с ним делать
+						tvInfo.setText(text);
+						//child.setBackgroundColor(Color.RED);
+					}
+
+					//Создаем AlertDialog:
+					//AlertDialog alertDialog = mDialogBuilder.create();
+					tableRow.setBackgroundColor(R.color.tableRowBackground);
+				}
+			})
+			.setNegativeButton("Отмена",
+			new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+
+		//Создаем AlertDialog:
+		alertDialog = mDialogBuilder.create();
+
+		//и отображаем его:
+		//alertDialog.show();
+
+
+
+		//editText1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_TEXT);
     }
 
 	@Override
-	protected void onResume()
-	{
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		Toast.makeText(this, "newConfig ", Toast.LENGTH_SHORT).show();	
+		tvInfo.setText("newconfig");
+	}
+
+
+	@Override
+	protected void onResume() {
 		readTable();
 		super.onResume();
 	}
-	
+
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
 		if (requestCode == PERMISSION_REQUEST_ID &&
 			grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-			grantResults[1] == PackageManager.PERMISSION_GRANTED){
+			grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
-			Toast.makeText(this, "PermissionResult ",Toast.LENGTH_SHORT).show();	
+			Toast.makeText(this, "PermissionResult ", Toast.LENGTH_SHORT).show();	
 
         } else {
             Toast.makeText(this, R.string.no_external_permissions, Toast.LENGTH_LONG).show();
@@ -129,46 +236,55 @@ public class MainActivity extends  Activity implements OnClickListener
 	}
 
 	@Override
-	public void onClick(View v)
-	{
+	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.mainButtonSet:
 				readTable();
 				//setTable();
 				break;
-				
+
 			case R.id.mainButtonClear:
 				writeTable();
 				break;
-				
+
 			case R.id.mainAddRow:
 				addRow();
 				//createPdf("test");
 				bitmap = loadBitmapFromView(tblLayout, tblLayout.getWidth(), tblLayout.getHeight());
                 createPdf();
 				break;
-				
+
 			case R.id.mainDellRow:
 				delRow();
-				
+				break;
+
+			case R.id.mainButtonSetPicker:
+				pressSetPicker();
 				break;
 		}
 
 	}
-	
-	void addRow(){		
+
+	void pressSetPicker() {
+		String str = Integer.toString(np1.getValue()) + "." 
+			+ Integer.toString(np2.getValue()) + " "
+			+ Integer.toString(np3.getValue()) + "."
+			+ Integer.toString(np4.getValue());
+		addRow(str);
+	}
+	void addRow() {		
 		String str = editText1.getText().toString();
 		addRow(str);
 	}
-	
+
 	// str = "xx.xx xx.xx"
-	int addRow(String str){
-		
+	int addRow(String str) {
+
 		String tmp;
 		String sep = ".";
 		int res = 0;
 		String[] s1 = str.split(" ");
-		if(s1.length !=2){
+		if (s1.length != 2) {
 			return 0;
 		}
 		float x = Float.parseFloat(s1[0]);
@@ -177,24 +293,24 @@ public class MainActivity extends  Activity implements OnClickListener
 		int h = (int)x;
 		tmp   = Float.toString(x).split("\\.")[1];
 		int m = Integer.parseInt(tmp);
-		if(tmp.length() == 1)
-			m = Integer.parseInt(tmp)*10;
+		if (tmp.length() == 1)
+			m = Integer.parseInt(tmp) * 10;
 		//tvInfo.append(tmp + " " + m + " " + tmp.length());
 
 		int h1 = (int)y;
 		tmp   = Float.toString(y).split("\\.")[1];
 		int m1 = Integer.parseInt(tmp);
-		if(tmp.length() == 1)
-			m1 = Integer.parseInt(tmp)*10;
+		if (tmp.length() == 1)
+			m1 = Integer.parseInt(tmp) * 10;
 
-		int hm  = h* 60+m;
-		int hm1 = h1*60+m1;
-		
+		int hm  = h * 60 + m;
+		int hm1 = h1 * 60 + m1;
+
 		/*if(x>y) res = hm1-hm;
-		else    res = hm-hm1;*/
-		res = Math.abs( hm1-hm );
-		int hour = res/60;
-		int min  = res-hour*60;
+		 else    res = hm-hm1;*/
+		res = Math.abs(hm1 - hm);
+		int hour = res / 60;
+		int min  = res - hour * 60;
 
 
 		LayoutInflater inflater = LayoutInflater.from(this);
@@ -208,60 +324,95 @@ public class MainActivity extends  Activity implements OnClickListener
 
 		tv2.setText(s1[0]);
 		tv3.setText(s1[1]);
-		tv4.setText(Integer.toString(hour)+sep+Integer.toString(min));
+		tv4.setText(Integer.toString(hour) + sep + Integer.toString(min));
 
-		tv1.setText( Integer.toString(tblLayout.getChildCount()+1) );
+		tv1.setText(Integer.toString(tblLayout.getChildCount() + 1));
 
 		tblLayout.addView(tr);
+		tr.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					//row = null;
+					//try {
+					tvInfo.setText(v.getClass().toString());
+                    TableRow row = (TableRow) v;
+					tableRow = (TableRow) v;
+					//} catch (Exception e) {
+					//   System.out.println(e);
+					//}
+					//if (row!=null){
+					final int count = row.getChildCount();
+					for (int i = 0; i < count; i++) {
+						final TextView child = (TextView) row.getChildAt(i);
+						String text = child.getText().toString(); // текст, что там дальше с ним делать
+						tvInfo.setText(text);
+						//child.setBackgroundColor(Color.RED);
+					}
+
+					//Создаем AlertDialog:
+					//AlertDialog alertDialog = mDialogBuilder.create();
+					row.setBackgroundColor(Color.RED);
+					alertDialog.show();
+
+					//}
+				}
+
+			});
+
+		tr.setOnTouchListener(new OnTouchListener() {
+				public boolean onTouch(View v, MotionEvent e) {
+
+					return false;
+				}
+			});
 		return res;
 	}
-	
-	void delRow(){
-		int i = tblLayout.getChildCount()-1;
-		if (i>=0)
+
+	void delRow() {
+		int i = tblLayout.getChildCount() - 1;
+		if (i >= 0)
 			tblLayout.removeViewAt(i);
 	}
-	
+
 	void readTable() {
 		try {
-			
+
 			int tMin =0;
 			// открываем поток для чтения
 			BufferedReader br = new BufferedReader(new InputStreamReader(openFileInput(FILENAME_SD)));
-			
+
 			tblLayout.removeAllViews();
 			String str = "";
 			// читаем содержимое
 			while ((str = br.readLine()) != null) {
 				tMin +=  addRow(str);
 			}
-			int thour = tMin/60;
-			int tmin  = tMin-thour*60;
-			tvInfo.append(""+thour+":"+tmin+" ");		
+			int thour = tMin / 60;
+			int tmin  = tMin - thour * 60;
+			tvInfo.append("" + thour + ":" + tmin + " ");		
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	void writeTable(){
-		
+
+	void writeTable() {
+
 		try {
 			int rowcount = tblLayout.getChildCount();
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(openFileOutput(FILENAME_SD, MODE_PRIVATE)));
-			
-			for (int row = 0; row < rowcount; row++){
+
+			for (int row = 0; row < rowcount; row++) {
 				TableRow tbr = (TableRow) tblLayout.getChildAt(row);
-				
+
 				TextView tv = (TextView) tbr.getChildAt(1);
 				String res1 = tv.getText().toString();
-			    		 tv = (TextView) tbr.getChildAt(2);
+				tv = (TextView) tbr.getChildAt(2);
 				String res2 = tv.getText().toString();
-				bw.write(res1+" "+res2);	
-				if(row != rowcount-1) bw.newLine();
+				bw.write(res1 + " " + res2);	
+				if (row != rowcount - 1) bw.newLine();
 			}
-			
+
 			bw.close();
 			Log.d(LOG_TAG, "Файл записан");
 		} catch (FileNotFoundException e) {
@@ -270,7 +421,7 @@ public class MainActivity extends  Activity implements OnClickListener
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Bitmap loadBitmapFromView(View v, int width, int height) {
         Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
@@ -278,18 +429,18 @@ public class MainActivity extends  Activity implements OnClickListener
 
         return b;
     }
-	
-	private void createPdf(){
+
+	private void createPdf() {
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         //  Display display = wm.getDefaultDisplay();
         DisplayMetrics displaymetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		
+
         float hight = tblLayout.getWidth();// Math.max(displaymetrics.heightPixels, displaymetrics.widthPixels); ;
         float width = tblLayout.getHeight(); // Math.min(displaymetrics.widthPixels, displaymetrics.heightPixels); ;
 
         int convertHighet = (int) width, convertWidth = (int) hight;
-tvInfo.append(" h= " + hight + " w= " + width + " ");
+		tvInfo.append(" h= " + hight + " w= " + width + " ");
 //        Resources mResources = getResources();
 //        Bitmap bitmap = BitmapFactory.decodeResource(mResources, R.drawable.screenshot);
 
@@ -324,30 +475,56 @@ tvInfo.append(" h= " + hight + " w= " + width + " ");
         document.close();
         Toast.makeText(this, "PDF of Scroll is created!!!", Toast.LENGTH_SHORT).show();
 
-        openGeneratedPDF();
-
+        //openGeneratedPDF();
+		writeTable("test");
     }
 
-    private void openGeneratedPDF(){
+    private void openGeneratedPDF() {
 		String directory_path = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(directory_path+"/pdffromScroll.pdf");
-        if (file.exists())
-        {
+        File file = new File(directory_path + "/pdffromScroll.pdf");
+        if (file.exists()) {
             Intent intent=new Intent(Intent.ACTION_VIEW);
             Uri uri = Uri.fromFile(file);
             intent.setDataAndType(uri, "application/pdf");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            try
-            {
+            try {
                 startActivity(intent);
-            }
-            catch(ActivityNotFoundException e)
-            {
+            } catch (ActivityNotFoundException e) {
                 Toast.makeText(this, "No Application available to view pdf", Toast.LENGTH_LONG).show();
             }
         }
     }
-		
+
+	void writeTable(String fName) {
+
+		try {
+			int rowcount = tblLayout.getChildCount();
+			String directory_path = Environment.getExternalStorageDirectory().getPath();
+			String targetTable = "/sdcard/table.txt";
+			BufferedWriter bw = new BufferedWriter(new FileWriter(targetTable));
+
+			for (int row = 0; row < rowcount; row++) {
+				TableRow tbr = (TableRow) tblLayout.getChildAt(row);
+
+				TextView tv = (TextView) tbr.getChildAt(1);
+				String res1 = tv.getText().toString();
+				tv = (TextView) tbr.getChildAt(2);
+				String res2 = tv.getText().toString();
+				tv = (TextView) tbr.getChildAt(2);
+				String res3 = tv.getText().toString();
+				bw.write(res1 + " " + res2 + " " + res3);	
+				bw.newLine();
+			}
+			bw.write(tvInfo.getText().toString());
+			bw.close();
+			Log.d(LOG_TAG, "Файл записан");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
 
