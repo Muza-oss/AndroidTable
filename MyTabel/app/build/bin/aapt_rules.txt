@@ -72,6 +72,6 @@
 # view watch-v20/res/layout-watch-v20/abc_alert_dialog_title_material.xml #generated:53
 -keep class android.widget.Space { <init>(...); }
 
-# view AndroidManifest.xml #generated:22
+# view AndroidManifest.xml #generated:21
 -keep class com.muza.mytabel.MainActivity { <init>(...); }
 

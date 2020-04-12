@@ -23,22 +23,23 @@ import android.view.ViewDebug.IntToString;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.ViewTreeObserver.OnTouchModeChangeListener;
+import android.graphics.drawable.ColorDrawable;
 
 public class MainActivity extends  Activity implements OnClickListener {
 	private static final int PERMISSION_REQUEST_ID = 4;
+
+    private static final String MY_SETTINGS = "my_settings";
 
 	final Context context = this;
 
 	final String LOG_TAG = "myLogs";
 
-	final String FILENAME = "file";
+	private String FILENAME_SD = "fileSD";
 
-	final String DIR_SD = "MyFiles";
-	final String FILENAME_SD = "fileSD";
-
-	private int curentRow = 0;
+	private int curentRow = -1;
 	private TableLayout tblLayout = null;
 	private TableRow 	tableRow  = null;
+    private TableRow    oldRow    = null;
 
 	private Button btnSet;
 	private Button btnClear;
@@ -56,6 +57,7 @@ public class MainActivity extends  Activity implements OnClickListener {
 
 	private Bitmap bitmap;
 
+    private boolean editMode = false;
 	private AlertDialog.Builder mDialogBuilder;
 	private AlertDialog alertDialog;
 
@@ -63,7 +65,19 @@ public class MainActivity extends  Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        SharedPreferences sp = getSharedPreferences(MY_SETTINGS, 
+                                                    Context.MODE_PRIVATE);
+        // проверяем, первый ли раз открывается программа
+        boolean hasVisited = sp.getBoolean("hasVisited", false);
 
+        if (!hasVisited) {    
+            Toast.makeText(this, " firstVisit " + FILENAME_SD, Toast.LENGTH_SHORT).show();             
+            SharedPreferences.Editor e = sp.edit();
+            e.putBoolean("hasVisited", true);
+            e.putString("file", "fileSD");
+            e.commit(); // не забудьте подтвердить изменения
+        }
+        FILENAME_SD = sp.getString("file", "fileSD");
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		PermissionUtil.checkAndRequest(this, PERMISSION_REQUEST_ID);
@@ -140,9 +154,8 @@ public class MainActivity extends  Activity implements OnClickListener {
 			});
 		editText1.setOnKeyListener(new OnKeyListener() {
 				public boolean onKey(View view, int keyCode, KeyEvent event) {
-					if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-
-						addRow();
+					if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {  
+						addRow();                      
 					    editText1.setText("");
 					    //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					    //imm.showSoftInput(editText1, InputMethodManager.SHOW_FORCED);
@@ -193,13 +206,16 @@ public class MainActivity extends  Activity implements OnClickListener {
 			.setNegativeButton("Отмена",
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
+                    tableRow.setBackgroundColor(R.color.tableRowBackground);
 					dialog.cancel();
 				}
 			});
 
 		//Создаем AlertDialog:
-		alertDialog = mDialogBuilder.create();
-
+      	alertDialog = mDialogBuilder.create();
+        alertDialog.getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND); 
 		//и отображаем его:
 		//alertDialog.show();
 
@@ -272,11 +288,64 @@ public class MainActivity extends  Activity implements OnClickListener {
 			+ Integer.toString(np4.getValue());
 		addRow(str);
 	}
+
 	void addRow() {		
 		String str = editText1.getText().toString();
-		addRow(str);
+        if (!editMode) {
+		    addRow(str);
+        } else {
+            editRow(str);
+        }
 	}
+    
+    int editRow(String str) {
+        String tmp;
+        String sep = ".";
+        int res = 0;
+        String[] s1 = str.split(" ");
+        if (s1.length != 2) {
+            return 0;
+        }
+        float x = Float.parseFloat(s1[0]);
+        float y = Float.parseFloat(s1[1]);
 
+        int h = (int)x;
+        tmp   = Float.toString(x).split("\\.")[1];
+        int m = Integer.parseInt(tmp);
+        if (tmp.length() == 1)
+            m = Integer.parseInt(tmp) * 10;
+        //tvInfo.append(tmp + " " + m + " " + tmp.length());
+
+        int h1 = (int)y;
+        tmp   = Float.toString(y).split("\\.")[1];
+        int m1 = Integer.parseInt(tmp);
+        if (tmp.length() == 1)
+            m1 = Integer.parseInt(tmp) * 10;
+
+        int hm  = h * 60 + m;
+        int hm1 = h1 * 60 + m1;
+
+        /*if(x>y) res = hm1-hm;
+         else    res = hm-hm1;*/
+        res = Math.abs(hm1 - hm);
+        int hour = res / 60;
+        int min  = res - hour * 60;
+
+        tableRow.setBackgroundColor(Color.GREEN);
+        //Находим ячейку для номера дня по идентификатору
+        
+        TextView tv2 =  tableRow.findViewById(R.id.col2);
+        TextView tv3 =  tableRow.findViewById(R.id.col3);
+        TextView tv4 =  tableRow.findViewById(R.id.col4);
+
+        tv2.setText(s1[0]);
+        tv3.setText(s1[1]);
+        tv4.setText(Integer.toString(hour) + sep + Integer.toString(min));
+
+        
+        return res;
+    }
+    
 	// str = "xx.xx xx.xx"
 	int addRow(String str) {
 
@@ -316,6 +385,7 @@ public class MainActivity extends  Activity implements OnClickListener {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		//Создаем строку таблицы, используя шаблон из файла /res/layout/table_row.xml
 		TableRow tr = (TableRow) inflater.inflate(R.layout.row, null);
+        tr.setBackgroundColor(R.color.tableRowBackground);
 		//Находим ячейку для номера дня по идентификатору
 		TextView tv1 =  tr.findViewById(R.id.col1);
 		TextView tv2 =  tr.findViewById(R.id.col2);
@@ -331,27 +401,43 @@ public class MainActivity extends  Activity implements OnClickListener {
 		tblLayout.addView(tr);
 		tr.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					//row = null;
-					//try {
+
 					tvInfo.setText(v.getClass().toString());
                     TableRow row = (TableRow) v;
 					tableRow = (TableRow) v;
-					//} catch (Exception e) {
-					//   System.out.println(e);
-					//}
-					//if (row!=null){
-					final int count = row.getChildCount();
-					for (int i = 0; i < count; i++) {
-						final TextView child = (TextView) row.getChildAt(i);
-						String text = child.getText().toString(); // текст, что там дальше с ним делать
-						tvInfo.setText(text);
-						//child.setBackgroundColor(Color.RED);
-					}
 
-					//Создаем AlertDialog:
-					//AlertDialog alertDialog = mDialogBuilder.create();
-					row.setBackgroundColor(Color.RED);
-					alertDialog.show();
+					final int count = row.getChildCount();
+
+                    final TextView child = (TextView) row.findViewById(R.id.col1);
+                    String text = child.getText().toString(); 
+                    tvInfo.setText(text);
+                    int id = Integer.parseInt(text);
+                    if (curentRow < 0) 
+                        curentRow = id;
+                    if (editMode == false) {
+
+					    row.setBackgroundColor(Color.RED);
+                        if (curentRow != id) {
+                            oldRow.setBackgroundColor(R.color.tableRowBackground);
+                            curentRow = id;
+                        }
+                        editMode = true;
+                    } else {
+                        //if (curentRow == id) {
+
+                        editMode = false;
+                        tableRow.setBackgroundColor(R.color.tableRowBackground);
+                        if (oldRow != null)
+                            oldRow.setBackgroundColor(R.color.tableRowBackground);
+                        if (curentRow != id) {
+                            row.setBackgroundColor(Color.RED);
+                            curentRow = id;
+                        } else {
+                            curentRow = -1;
+                        }
+                    }
+                    oldRow = row;
+                    //alertDialog.show();
 
 					//}
 				}
