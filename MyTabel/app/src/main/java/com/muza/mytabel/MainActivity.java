@@ -24,6 +24,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.ViewTreeObserver.OnTouchModeChangeListener;
 import android.graphics.drawable.ColorDrawable;
+import com.muza.mytabel.Utils.EditTextKBDetector;
 
 public class MainActivity extends  Activity implements OnClickListener {
 	private static final int PERMISSION_REQUEST_ID = 4;
@@ -87,8 +88,10 @@ public class MainActivity extends  Activity implements OnClickListener {
 
 		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		tblLayout = findViewById(R.id.tableLayout);
-
-
+		LinearLayout ll = (LinearLayout)findViewById(R.id.mainLinearLayout1);
+		EditTextKBDetector et = new EditTextKBDetector(this);
+		ll.addView(et);
+		
 
 		btnSet = findViewById(R.id.mainButtonSet);
 		btnSet.setOnClickListener(this);
@@ -126,25 +129,25 @@ public class MainActivity extends  Activity implements OnClickListener {
         tvInfo.setTextColor(Color.parseColor("#ffd32b3b"));
 
 		editText1 = findViewById(R.id.mainEditText1);
-		/*editText1.addTextChangedListener(new TextWatcher(){
+		editText1.addTextChangedListener(new TextWatcher(){
 		 @Override
 		 public void afterTextChanged(Editable s) {
 		 // Прописываем то, что надо выполнить после изменения текста
 		 //setTable();
-
+			//tvInfo.setText(""+ ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).isActive());
 		 }
 
 		 @Override
 		 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+			 
 
 		 }
 
 		 @Override
 		 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+			
 		 }
-		 });*/
+		 });
 		editText1.addOnLayoutChangeListener(new OnLayoutChangeListener(){
 				public void onLayoutChange(View v, int left, int top, int right, int bottom,
 										   int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -167,7 +170,7 @@ public class MainActivity extends  Activity implements OnClickListener {
 					}
 				}
 			});
-
+		
 
 		//Получаем вид с файла prompt.xml, который применим для диалогового окна:
 		LayoutInflater li = LayoutInflater.from(context);
@@ -491,9 +494,9 @@ public class MainActivity extends  Activity implements OnClickListener {
 			for (int row = 0; row < rowcount; row++) {
 				TableRow tbr = (TableRow) tblLayout.getChildAt(row);
 
-				TextView tv = (TextView) tbr.getChildAt(1);
+				TextView tv = (TextView) tbr.findViewById(R.id.col2);
 				String res1 = tv.getText().toString();
-				tv = (TextView) tbr.getChildAt(2);
+				tv = (TextView) tbr.findViewById(R.id.col3);
 				String res2 = tv.getText().toString();
 				bw.write(res1 + " " + res2);	
 				if (row != rowcount - 1) bw.newLine();
