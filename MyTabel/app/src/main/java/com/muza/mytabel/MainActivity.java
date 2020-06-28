@@ -1,6 +1,7 @@
 
 package com.muza.mytabel;
 
+import android.annotation.SuppressLint;
 import android.app.*;
 import android.os.*;
 import android.widget.*;
@@ -26,7 +27,7 @@ import android.view.ViewTreeObserver.OnTouchModeChangeListener;
 import android.graphics.drawable.ColorDrawable;
 import com.muza.mytabel.Utils.EditTextKBDetector;
 
-public class MainActivity extends  Activity implements OnClickListener {
+public class MainActivity extends  Activity implements View.OnClickListener {
 	private static final int PERMISSION_REQUEST_ID = 4;
 
     private static final String MY_SETTINGS = "my_settings";
@@ -148,14 +149,14 @@ public class MainActivity extends  Activity implements OnClickListener {
 			
 		 }
 		 });
-		editText1.addOnLayoutChangeListener(new OnLayoutChangeListener(){
+		editText1.addOnLayoutChangeListener(new View.OnLayoutChangeListener(){
 				public void onLayoutChange(View v, int left, int top, int right, int bottom,
 										   int oldLeft, int oldTop, int oldRight, int oldBottom) {
 					//tvInfo.setText("hhh");
 				}
 
 			});
-		editText1.setOnKeyListener(new OnKeyListener() {
+		editText1.setOnKeyListener(new View.OnKeyListener() {
 				public boolean onKey(View view, int keyCode, KeyEvent event) {
 					if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {  
 						addRow();                      
@@ -350,6 +351,7 @@ public class MainActivity extends  Activity implements OnClickListener {
     }
     
 	// str = "xx.xx xx.xx"
+	@SuppressLint("ResourceAsColor")
 	int addRow(String str) {
 
 		String tmp;
@@ -447,7 +449,7 @@ public class MainActivity extends  Activity implements OnClickListener {
 
 			});
 
-		tr.setOnTouchListener(new OnTouchListener() {
+		tr.setOnTouchListener(new View.OnTouchListener() {
 				public boolean onTouch(View v, MotionEvent e) {
 
 					return false;

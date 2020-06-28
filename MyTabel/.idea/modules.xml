@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyTabel.iml" filepath="$PROJECT_DIR$/MyTabel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyTabel.iml" filepath="$PROJECT_DIR$/MyTabel.iml" group="MyTabel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="MyTabel/app" />
     </modules>
   </component>
 </project>
