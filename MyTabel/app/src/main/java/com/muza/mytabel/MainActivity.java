@@ -26,6 +26,9 @@ import android.content.res.Configuration;
 import android.view.ViewTreeObserver.OnTouchModeChangeListener;
 import android.graphics.drawable.ColorDrawable;
 import com.muza.mytabel.Utils.EditTextKBDetector;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import android.text.format.Time;
 
 public class MainActivity extends  Activity implements View.OnClickListener {
 	private static final int PERMISSION_REQUEST_ID = 4;
@@ -63,23 +66,30 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 	private AlertDialog.Builder mDialogBuilder;
 	private AlertDialog alertDialog;
 
+	private SharedPreferences mSharedPreferences;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        SharedPreferences sp = getSharedPreferences(MY_SETTINGS, 
-                                                    Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+		
         // проверяем, первый ли раз открывается программа
-        boolean hasVisited = sp.getBoolean("hasVisited", false);
+        boolean hasVisited = mSharedPreferences.getBoolean("hasVisited", false);
 
         if (!hasVisited) {    
             Toast.makeText(this, " firstVisit " + FILENAME_SD, Toast.LENGTH_SHORT).show();             
-            SharedPreferences.Editor e = sp.edit();
+            SharedPreferences.Editor e = mSharedPreferences.edit();
             e.putBoolean("hasVisited", true);
             e.putString("file", "fileSD");
+			e.putInt("np1", 6);
+			e.putInt("np2", 45);
+			e.putInt("np3", 19);
+			e.putInt("np4", 0);
+			
             e.commit(); // не забудьте подтвердить изменения
         }
-        FILENAME_SD = sp.getString("file", "fileSD");
+        FILENAME_SD = mSharedPreferences.getString("file", "fileSD");
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		PermissionUtil.checkAndRequest(this, PERMISSION_REQUEST_ID);
@@ -109,7 +119,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
         np1.setMinValue(1);
         np1.setMaxValue(24);
 		// np1.setWrapSelectorWheel(true);
-
+		
 		np2 = (NumberPicker) findViewById(R.id.mainNumberPicker2);  
         np2.setMinValue(0);
         np2.setMaxValue(59);
@@ -124,7 +134,12 @@ public class MainActivity extends  Activity implements View.OnClickListener {
         np4.setMinValue(0);
         np4.setMaxValue(59);
 		//   np4.setWrapSelectorWheel(true);
-
+		
+		np1.setValue(mSharedPreferences.getInt("np1", 6));
+		np2.setValue(mSharedPreferences.getInt("np2", 45));
+		np3.setValue(mSharedPreferences.getInt("np3", 19));
+		np4.setValue(mSharedPreferences.getInt("np4", 0));
+		
 		tvInfo = findViewById(R.id.mainTextView1);
 		//Set TextView text color
         tvInfo.setTextColor(Color.parseColor("#ffd32b3b"));
@@ -223,8 +238,14 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		//и отображаем его:
 		//alertDialog.show();
 
-
-
+		/*
+		DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+		String date = df.format(Calendar.getInstance().getTime());
+		Toast.makeText(this, "date "+ date, Toast.LENGTH_SHORT).show();	
+		
+		
+		tvInfo.setText("day "+Calendar.getInstance().get(Calendar.DAY_OF_WEEK)+" "+date+ " ");
+		*/
 		//editText1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_TEXT);
     }
 
@@ -408,40 +429,46 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 				public void onClick(View v) {
 
 					tvInfo.setText(v.getClass().toString());
-                    TableRow row = (TableRow) v;
+                    
 					tableRow = (TableRow) v;
 
-					final int count = row.getChildCount();
+					final int count = tableRow.getChildCount();
 
-                    final TextView child = (TextView) row.findViewById(R.id.col1);
-                    String text = child.getText().toString(); 
-                    tvInfo.setText(text);
-                    int id = Integer.parseInt(text);
+                    final TextView tvCol1 = (TextView) tableRow.findViewById(R.id.col1);
+					final TextView tvCol2 = (TextView) tableRow.findViewById(R.id.col2);
+					final TextView tvCol3 = (TextView) tableRow.findViewById(R.id.col3);
+					
+                    String text = tvCol2.getText().toString() + " " + tvCol3.getText().toString(); 
+				
+                    int id = Integer.parseInt(tvCol1.getText().toString());
                     if (curentRow < 0) 
                         curentRow = id;
                     if (editMode == false) {
 
-					    row.setBackgroundColor(Color.RED);
+					    tableRow.setBackgroundColor(Color.RED);
                         if (curentRow != id) {
                             oldRow.setBackgroundColor(R.color.tableRowBackground);
                             curentRow = id;
                         }
+						editText1.setText(text);
                         editMode = true;
                     } else {
                         //if (curentRow == id) {
-
+						editText1.setText("");
                         editMode = false;
                         tableRow.setBackgroundColor(R.color.tableRowBackground);
                         if (oldRow != null)
                             oldRow.setBackgroundColor(R.color.tableRowBackground);
                         if (curentRow != id) {
-                            row.setBackgroundColor(Color.RED);
+                            tableRow.setBackgroundColor(Color.RED);
                             curentRow = id;
+							editText1.setText(text);
+							editMode = true;
                         } else {
                             curentRow = -1;
                         }
                     }
-                    oldRow = row;
+                    oldRow = tableRow;
                     //alertDialog.show();
 
 					//}
