@@ -202,9 +202,8 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
 
 		//Настраиваем сообщение в диалоговом окне:
-		mDialogBuilder
-			.setCancelable(false)
-			.setPositiveButton("OK",
+		mDialogBuilder.setCancelable(false)
+		   .setPositiveButton("OK",
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					//Вводим текст и отображаем в строке ввода на основном экране:
@@ -437,6 +436,11 @@ public class MainActivity extends  Activity implements View.OnClickListener {
                     final TextView tvCol1 = (TextView) tableRow.findViewById(R.id.col1);
 					final TextView tvCol2 = (TextView) tableRow.findViewById(R.id.col2);
 					final TextView tvCol3 = (TextView) tableRow.findViewById(R.id.col3);
+					
+					np1.setValue((int)Float.parseFloat(tvCol2.getText().toString()));
+					np2.setValue(Integer.parseInt(tvCol2.getText().toString().split("\\.")[1]));
+					np3.setValue((int)Float.parseFloat(tvCol3.getText().toString()));
+					np4.setValue(Integer.parseInt(tvCol3.getText().toString().split("\\.")[1]));
 					
                     String text = tvCol2.getText().toString() + " " + tvCol3.getText().toString(); 
 				
