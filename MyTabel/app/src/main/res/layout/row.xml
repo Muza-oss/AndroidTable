@@ -22,7 +22,7 @@
 		android:id="@+id/colDate"
 		android:background="#1E213D"
 		android:layout_margin="1dip"
-		android:layout_weight="1.0"
+		android:layout_weight="2.0"
 		android:gravity="center"/>
 
 	<TextView

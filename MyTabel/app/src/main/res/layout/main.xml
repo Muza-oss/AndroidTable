@@ -85,12 +85,12 @@
 			android:layout_weight="1.0"/>
 
 		<EditText
+			android:id="@+id/mainEditText1"
 			android:layout_width="wrap_content"
-			android:inputType="numberDecimal|text"
 			android:layout_height="wrap_content"
+			android:layout_weight="5"
 			android:ems="10"
-			android:id="@+id/mainEditText1"/>
-
+			android:inputType="numberDecimal|text" />
 		<Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -98,6 +98,13 @@
 			android:id="@+id/mainButtonClear"
 			android:layout_weight="1.0"/>
 
+		<com.muza.mytabel.Utils.EditTextKBDetector
+			android:id="@+id/mainEditText3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="5"
+			android:ems="10"
+			android:inputType="numberDecimal|text" />
 	</LinearLayout>
 
 	<LinearLayout

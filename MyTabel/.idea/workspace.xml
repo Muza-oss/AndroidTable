@@ -6,35 +6,16 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ca54f64-c88a-403e-9c49-9176a14e3110" name="Default Changelist" comment="Ubuntu Astudio">
-      <change afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../.idea/libraries/gradle_wrapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../.idea/libraries/gradle_wrapper2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MyTabel.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/gc.properties" beforeDir="false" />
+    <list default="true" id="6ca54f64-c88a-403e-9c49-9176a14e3110" name="Default Changelist" comment="Win Astudio">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyTabel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MyTabel.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/muza/mytabel/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/muza/mytabel/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/muza/mytabel/Utils/EditTextKBDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/muza/mytabel/Utils/EditTextKBDetector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/row.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +27,7 @@
     <option name="testRunner" value="GRADLE" />
     <option name="delegatedBuild" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_29" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="eugqrwjf89lj4985" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -82,6 +63,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="ProjectId" id="1dJutRBk0Q6tAsM60yUDFnuQXP6" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -95,6 +77,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="pixel_2_pie_9_0_-_api_28" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-08-15T22:55:02.145Z" />
     <property name="ResourceManagerPrefKey.ResourceType" value="LAYOUT" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -186,28 +170,63 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Ubuntu Astudio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ubuntu Astudio" />
+    <MESSAGE value="Win Astudio" />
+    <option name="LAST_COMMIT_MESSAGE" value="Win Astudio" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="932" y="196" width="816" height="729" key="#Intentions" timestamp="1597531974753">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="932" y="196" width="816" height="729" key="#Intentions/0.0.1920.1040@0.0.1920.1040" timestamp="1597531974753" />
     <state x="256" y="218" width="1084" height="701" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1592159669050">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="256" y="218" width="1084" height="701" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1592159669050" />
-    <state x="382" y="136" width="822" height="854" key="CommitChangelistDialog2" timestamp="1593354670806">
-      <screen x="70" y="27" width="1850" height="1053" />
+    <state x="324" y="108" width="822" height="854" key="CommitChangelistDialog2" timestamp="1597595705308">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="324" y="108" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1597595705308" />
     <state x="382" y="136" width="822" height="854" key="CommitChangelistDialog2/70.27.1850.1053@70.27.1850.1053" timestamp="1593354670806" />
+    <state x="184" y="86" width="1536" height="860" key="DiffContextDialog" timestamp="1594235646605">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="184" y="86" width="1536" height="860" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594235646605" />
     <state x="671" y="291" width="452" height="550" key="FileChooserDialogImpl" timestamp="1592156638639">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="671" y="291" width="452" height="550" key="FileChooserDialogImpl/70.27.1850.1053@70.27.1850.1053" timestamp="1592156638639" />
+    <state x="672" y="235" key="MultipleFileMergeDialog" timestamp="1594235523319">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="672" y="235" key="MultipleFileMergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594235523319" />
+    <state x="914" y="191" key="SettingsEditor" timestamp="1594172824185">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="914" y="191" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1594172824185" />
     <state x="393" y="296" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1593354511558">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="393" y="296" width="800" height="535" key="Vcs.Push.Dialog.v2/70.27.1850.1053@70.27.1850.1053" timestamp="1593354511558" />
-    <state x="454" y="387" key="com.intellij.ide.util.TipDialog" timestamp="1593354846082">
-      <screen x="70" y="27" width="1850" height="1053" />
+    <state x="663" y="259" width="1200" height="800" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1594172863415">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="663" y="259" width="1200" height="800" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594172863415" />
+    <state x="399" y="356" key="com.intellij.ide.util.TipDialog" timestamp="1597531744964">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="399" y="356" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597531744964" />
     <state x="454" y="387" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1593354846082" />
+    <state x="712" y="264" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1594503944044">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="712" y="264" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1594503944044" />
+    <state x="749" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594235506766">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="749" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1594235506766" />
+    <state x="673" y="310" key="git4idea.merge.GitPullDialog" timestamp="1597531784148">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="673" y="310" key="git4idea.merge.GitPullDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597531784148" />
   </component>
 </project>

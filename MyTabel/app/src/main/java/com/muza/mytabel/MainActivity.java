@@ -99,9 +99,10 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 
 		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		tblLayout = findViewById(R.id.tableLayout);
-		LinearLayout ll = (LinearLayout)findViewById(R.id.mainLinearLayout1);
-		EditTextKBDetector et = new EditTextKBDetector(this);
-		ll.addView(et);
+		//LinearLayout ll = (LinearLayout)findViewById(R.id.mainLinearLayout1);
+		//EditTextKBDetector et = new EditTextKBDetector(this);
+		//et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_TEXT);
+		//ll.addView(et);
 		
 
 		btnSet = findViewById(R.id.mainButtonSet);
@@ -218,13 +219,13 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 
 					//Создаем AlertDialog:
 					//AlertDialog alertDialog = mDialogBuilder.create();
-					tableRow.setBackgroundColor(R.color.tableRowBackground);
+					tableRow.setBackgroundColor(getResources().getColor(R.color.tableRowBackground));
 				}
 			})
 			.setNegativeButton("Отмена",
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
-                    tableRow.setBackgroundColor(R.color.tableRowBackground);
+                    tableRow.setBackgroundColor(getResources().getColor(R.color.tableRowBackground));
 					dialog.cancel();
 				}
 			});
@@ -436,12 +437,15 @@ public class MainActivity extends  Activity implements View.OnClickListener {
                     final TextView tvCol1 = (TextView) tableRow.findViewById(R.id.col1);
 					final TextView tvCol2 = (TextView) tableRow.findViewById(R.id.col2);
 					final TextView tvCol3 = (TextView) tableRow.findViewById(R.id.col3);
-					
-					np1.setValue((int)Float.parseFloat(tvCol2.getText().toString()));
-					np2.setValue(Integer.parseInt(tvCol2.getText().toString().split("\\.")[1]));
-					np3.setValue((int)Float.parseFloat(tvCol3.getText().toString()));
-					np4.setValue(Integer.parseInt(tvCol3.getText().toString().split("\\.")[1]));
-					
+
+					float fCol2 = Float.parseFloat(tvCol2.getText().toString());
+					float fCol3 = Float.parseFloat(tvCol3.getText().toString());
+
+					np1.setValue((int)fCol2);
+					np2.setValue(Integer.parseInt(Float.toString(fCol2).split("\\.")[1]));
+					np3.setValue((int)fCol3);
+					np4.setValue(Integer.parseInt(Float.toString(fCol3).split("\\.")[1]));
+
                     String text = tvCol2.getText().toString() + " " + tvCol3.getText().toString(); 
 				
                     int id = Integer.parseInt(tvCol1.getText().toString());

@@ -1,5 +1,6 @@
 package com.muza.mytabel.Utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 /**
  * Created by mirkopinna on 26/09/15.
  */
+@SuppressLint("AppCompatCustomView")
 public class EditTextKBDetector extends EditText {
 
     public static final String KEYBOARD_HIDE_EVENT = "keyboard.hidden.event";
@@ -58,6 +60,7 @@ public class EditTextKBDetector extends EditText {
 					if (i == EditorInfo.IME_ACTION_DONE) {
 						//Keyboard closed with done button
 						clearFocus();
+                        Toast.makeText(mContext,"keycode_enter",Toast.LENGTH_SHORT).show();
 						//fireKBHiddenEvent();
 					}
 					return false;
@@ -70,7 +73,15 @@ public class EditTextKBDetector extends EditText {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
             //Keyboard closed with back button
             clearFocus();
+            Toast.makeText(mContext,"keycode_back",Toast.LENGTH_SHORT).show();
             //fireKBHiddenEvent();
+        }
+        if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+            //Keyboard closed with back button
+
+            Toast.makeText(mContext,"keycode_enter",Toast.LENGTH_SHORT).show();
+            //fireKBHiddenEvent();
+
         }
         return super.dispatchKeyEvent(event);
     }
