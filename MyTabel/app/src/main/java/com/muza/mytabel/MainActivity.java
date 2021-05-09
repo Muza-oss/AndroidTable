@@ -1,5 +1,5 @@
 
-package com.muza.mytabel;
+package com.muza.mytabel;  
 
 import android.annotation.SuppressLint;
 import android.app.*;
@@ -29,6 +29,9 @@ import com.muza.mytabel.Utils.EditTextKBDetector;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import android.text.format.Time;
+import android.support.v4.content.*;
+import com.muza.mytabel.Utils.*;
+import android.view.animation.*;
 
 public class MainActivity extends  Activity implements View.OnClickListener {
 	private static final int PERMISSION_REQUEST_ID = 4;
@@ -37,7 +40,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 
 	final Context context = this;
 
-	final String LOG_TAG = "myLogs";
+	final String LOG_TAG = "=== Table LOG ====";
 
 	private String FILENAME_SD = "fileSD";
 
@@ -52,6 +55,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 	private Button btnDellRow;
 	private Button btnSetPicker;
 
+	private LinearLayout NumberPickerLayout;
 	private NumberPicker np1;
 	private NumberPicker np2;
 	private NumberPicker np3;
@@ -59,13 +63,13 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 
 	private EditText editText1;
 	private TextView tvInfo;
+	
+	private Utils mUtil;
 
 	private Bitmap bitmap;
-
     private boolean editMode = false;
-	private AlertDialog.Builder mDialogBuilder;
-	private AlertDialog alertDialog;
-
+	private Animation anim = null;
+	
 	private SharedPreferences mSharedPreferences;
 	
     @Override
@@ -89,6 +93,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 			
             e.commit(); // не забудьте подтвердить изменения
         }
+				
         FILENAME_SD = mSharedPreferences.getString("file", "fileSD");
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -97,13 +102,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		StrictMode.setVmPolicy(builder.build());
 		builder.detectFileUriExposure();
 
-		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		tblLayout = findViewById(R.id.tableLayout);
-		//LinearLayout ll = (LinearLayout)findViewById(R.id.mainLinearLayout1);
-		//EditTextKBDetector et = new EditTextKBDetector(this);
-		//et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_TEXT);
-		//ll.addView(et);
-		
 
 		btnSet = findViewById(R.id.mainButtonSet);
 		btnSet.setOnClickListener(this);
@@ -116,6 +115,8 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		btnSetPicker = findViewById(R.id.mainButtonSetPicker);
 		btnSetPicker.setOnClickListener(this);
 
+		NumberPickerLayout = (LinearLayout)findViewById(R.id.mainNumberPickerLayout);
+		
 	    np1 = (NumberPicker) findViewById(R.id.mainNumberPicker1);  
         np1.setMinValue(1);
         np1.setMaxValue(24);
@@ -145,33 +146,10 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		//Set TextView text color
         tvInfo.setTextColor(Color.parseColor("#ffd32b3b"));
 
-		editText1 = findViewById(R.id.mainEditText1);
-		editText1.addTextChangedListener(new TextWatcher(){
-		 @Override
-		 public void afterTextChanged(Editable s) {
-		 // Прописываем то, что надо выполнить после изменения текста
-		 //setTable();
-			//tvInfo.setText(""+ ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).isActive());
-		 }
-
-		 @Override
-		 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			 
-
-		 }
-
-		 @Override
-		 public void onTextChanged(CharSequence s, int start, int before, int count) {
-			
-		 }
-		 });
-		editText1.addOnLayoutChangeListener(new View.OnLayoutChangeListener(){
-				public void onLayoutChange(View v, int left, int top, int right, int bottom,
-										   int oldLeft, int oldTop, int oldRight, int oldBottom) {
-					//tvInfo.setText("hhh");
-				}
-
-			});
+		editText1 = findViewById(R.id.mainEditTextInput);
+		
+		mUtil = new Utils( context);
+				
 		editText1.setOnKeyListener(new View.OnKeyListener() {
 				public boolean onKey(View view, int keyCode, KeyEvent event) {
 					if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_ENTER)) {  
@@ -189,55 +167,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 			});
 		
 
-		//Получаем вид с файла prompt.xml, который применим для диалогового окна:
-		LayoutInflater li = LayoutInflater.from(context);
-		View promptsView = li.inflate(R.layout.prompt, null);
-
-		//Создаем AlertDialog
-	    mDialogBuilder = new AlertDialog.Builder(context);
-
-		//Настраиваем prompt.xml для нашего AlertDialog:
-		mDialogBuilder.setView(promptsView);
-
-		//Настраиваем отображение поля для ввода текста в открытом диалоге:
-		final EditText userInput = (EditText) promptsView.findViewById(R.id.input_text);
-
-		//Настраиваем сообщение в диалоговом окне:
-		mDialogBuilder.setCancelable(false)
-		   .setPositiveButton("OK",
-			new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					//Вводим текст и отображаем в строке ввода на основном экране:
-					editText1.setText(userInput.getText());
-					final int count = tableRow.getChildCount();
-					for (int i = 0; i < count; i++) {
-						final TextView child = (TextView) tableRow.getChildAt(i);
-						String text = child.getText().toString(); // текст, что там дальше с ним делать
-						tvInfo.setText(text);
-						//child.setBackgroundColor(Color.RED);
-					}
-
-					//Создаем AlertDialog:
-					//AlertDialog alertDialog = mDialogBuilder.create();
-					tableRow.setBackgroundColor(getResources().getColor(R.color.tableRowBackground));
-				}
-			})
-			.setNegativeButton("Отмена",
-			new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-                    tableRow.setBackgroundColor(getResources().getColor(R.color.tableRowBackground));
-					dialog.cancel();
-				}
-			});
-
-		//Создаем AlertDialog:
-      	alertDialog = mDialogBuilder.create();
-        alertDialog.getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND); 
-		//и отображаем его:
-		//alertDialog.show();
-
+		
 		/*
 		DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
 		String date = df.format(Calendar.getInstance().getTime());
@@ -249,18 +179,46 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		//editText1.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_TEXT);
     }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		Toast.makeText(this, "newConfig ", Toast.LENGTH_SHORT).show();	
-		tvInfo.setText("newconfig");
-	}
+	private BroadcastReceiver onNotice= new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// intent can contain anydata
+			Log.d(LOG_TAG, "onReceive called");
+			if(intent.getAction() == EditTextKBDetector.KEYBOARD_HIDE_EVENT){
+				NumberPickerLayout.setVisibility(View.VISIBLE);
+				anim = AnimationUtils.loadAnimation(context, R.anim.mytrans);
+				NumberPickerLayout.startAnimation(anim);
+				
+			}
+			if(intent.getAction() == EditTextKBDetector.KEYBOARD_SHOW_EVENT){
+				NumberPickerLayout.setVisibility(View.GONE);
+				anim = AnimationUtils.loadAnimation(context, R.anim.mytransout);
+				NumberPickerLayout.startAnimation(anim);
+				
+			}
+			//Toast.makeText(context,""+intent.getAction(),Toast.LENGTH_SHORT).show();
+			
+		}
+	};
 
 
 	@Override
 	protected void onResume() {
 		readTable();
 		super.onResume();
+		IntentFilter iff=   new IntentFilter(EditTextKBDetector.KEYBOARD_HIDE_EVENT);//  new IntentFilter(MyIntentService.ACTION);
+		iff.addAction(EditTextKBDetector.KEYBOARD_SHOW_EVENT);
+		LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+		
+	}
+
+	@Override
+	protected void onPause()
+	{
+		// TODO: Implement this method
+		super.onPause();
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
 	}
 
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -293,6 +251,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 				//createPdf("test");
 				bitmap = loadBitmapFromView(tblLayout, tblLayout.getWidth(), tblLayout.getHeight());
                 createPdf();
+					
 				break;
 
 			case R.id.mainDellRow:
@@ -357,7 +316,6 @@ public class MainActivity extends  Activity implements View.OnClickListener {
         int min  = res - hour * 60;
 
         tableRow.setBackgroundColor(Color.GREEN);
-        //Находим ячейку для номера дня по идентификатору
         
         TextView tv2 =  tableRow.findViewById(R.id.col2);
         TextView tv3 =  tableRow.findViewById(R.id.col3);
@@ -427,9 +385,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 		tblLayout.addView(tr);
 		tr.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-
-					tvInfo.setText(v.getClass().toString());
-                    
+			       
 					tableRow = (TableRow) v;
 
 					final int count = tableRow.getChildCount();
@@ -440,11 +396,10 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 
 					float fCol2 = Float.parseFloat(tvCol2.getText().toString());
 					float fCol3 = Float.parseFloat(tvCol3.getText().toString());
-
 					np1.setValue((int)fCol2);
-					np2.setValue(Integer.parseInt(Float.toString(fCol2).split("\\.")[1]));
+					np2.setValue(mUtil.getMin(fCol2));//  Integer.parseInt(Float.toString(fCol2).split("\\.")[1]));
 					np3.setValue((int)fCol3);
-					np4.setValue(Integer.parseInt(Float.toString(fCol3).split("\\.")[1]));
+					np4.setValue(mUtil.getMin(fCol3));//  Integer.parseInt(Float.toString(fCol3).split("\\.")[1]));
 
                     String text = tvCol2.getText().toString() + " " + tvCol3.getText().toString(); 
 				
@@ -461,8 +416,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 						editText1.setText(text);
                         editMode = true;
                     } else {
-                        //if (curentRow == id) {
-						editText1.setText("");
+						//editText1.setText("");
                         editMode = false;
                         tableRow.setBackgroundColor(R.color.tableRowBackground);
                         if (oldRow != null)
@@ -477,17 +431,6 @@ public class MainActivity extends  Activity implements View.OnClickListener {
                         }
                     }
                     oldRow = tableRow;
-                    //alertDialog.show();
-
-					//}
-				}
-
-			});
-
-		tr.setOnTouchListener(new View.OnTouchListener() {
-				public boolean onTouch(View v, MotionEvent e) {
-
-					return false;
 				}
 			});
 		return res;
@@ -502,7 +445,10 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 	void readTable() {
 		try {
 
-			int tMin =0;
+			int tMin = 0;
+			int tDay = 0;
+			
+			
 			// открываем поток для чтения
 			BufferedReader br = new BufferedReader(new InputStreamReader(openFileInput(FILENAME_SD)));
 
@@ -511,10 +457,23 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 			// читаем содержимое
 			while ((str = br.readLine()) != null) {
 				tMin +=  addRow(str);
+				if( Float.parseFloat(str.split(" ")[1]) > 13)
+					tDay ++;
 			}
+			
 			int thour = tMin / 60;
 			int tmin  = tMin - thour * 60;
-			tvInfo.append("" + thour + ":" + tmin + " ");		
+			
+			int tMmin  = tMin  - tDay*30;
+			int tOhour = tMmin / 60;
+			int tOmin  = tMmin - tOhour * 60;
+			
+			tvInfo.setText("" + thour + ":" + tmin + " " + tOhour + ":" + tOmin + " " + tMmin/60*54);	
+			
+			
+			anim = AnimationUtils.loadAnimation(this, R.anim.mytrans);
+			tvInfo.startAnimation(anim);
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -566,7 +525,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
         float width = tblLayout.getHeight(); // Math.min(displaymetrics.widthPixels, displaymetrics.heightPixels); ;
 
         int convertHighet = (int) width, convertWidth = (int) hight;
-		tvInfo.append(" h= " + hight + " w= " + width + " ");
+	//	tvInfo.append(" h= " + hight + " w= " + width + " ");
 //        Resources mResources = getResources();
 //        Bitmap bitmap = BitmapFactory.decodeResource(mResources, R.drawable.screenshot);
 

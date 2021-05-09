@@ -75,3 +75,6 @@
 # view AndroidManifest.xml #generated:21
 -keep class com.muza.mytabel.MainActivity { <init>(...); }
 
+# view res/layout/main.xml #generated:89
+-keep class com.muza.mytabel.Utils.EditTextKBDetector { <init>(...); }
+
