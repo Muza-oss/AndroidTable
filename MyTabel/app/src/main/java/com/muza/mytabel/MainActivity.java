@@ -82,7 +82,7 @@ public class MainActivity extends  Activity implements View.OnClickListener {
         boolean hasVisited = mSharedPreferences.getBoolean("hasVisited", false);
 
         if (!hasVisited) {    
-            Toast.makeText(this, " firstVisit " + FILENAME_SD, Toast.LENGTH_SHORT).show();             
+            Toast.makeText(this, " firstVisit  " + FILENAME_SD, Toast.LENGTH_SHORT).show();             
             SharedPreferences.Editor e = mSharedPreferences.edit();
             e.putBoolean("hasVisited", true);
             e.putString("file", "fileSD");
