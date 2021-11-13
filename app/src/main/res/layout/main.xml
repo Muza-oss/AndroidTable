@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="1.0"
+		android:gravity="center"
+		android:layout_gravity="center">
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<TableLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/tableLayout"
+				android:background="@color/tablelayoutBackground"
+				android:gravity="center"/>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="4.0"
+		android:id="@+id/mainNumberPickerLayout">
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker1"
+			android:layout_weight="1.0"
+			android:background="#FF224DBA"/>
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker2"
+			android:layout_weight="1.0"/>
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Set"
+			android:id="@+id/mainButtonSetPicker"
+			android:layout_weight="1.0"/>
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker3"
+			android:layout_weight="1.0"
+			android:background="#FF224DBA"/>
+
+		<NumberPicker
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainNumberPicker4"
+			android:layout_weight="1.0"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="4"
+		android:id="@+id/mainLinearLayout1">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Load"
+			android:id="@+id/mainButtonSet"
+			android:layout_weight="1.0"/>
+		
+		<com.muza.mytabel.Utils.EditTextKBDetector
+			android:id="@+id/mainEditTextInput"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="5"
+			android:ems="10"
+			android:inputType="numberDecimal|text"/>
+		
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Save"
+			android:id="@+id/mainButtonClear"
+			android:layout_weight="1.0"/>
+
+	
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_weight="4">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="AddRow"
+			android:layout_weight="1.0"
+			android:id="@+id/mainAddRow"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/mainTextView1"
+			android:layout_weight="2"
+			android:gravity="center"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="DellRow"
+			android:layout_weight="1.0"
+			android:id="@+id/mainDellRow"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
