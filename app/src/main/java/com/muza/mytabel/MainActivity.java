@@ -72,12 +72,69 @@ public class MainActivity extends  Activity implements View.OnClickListener {
 	
 	private SharedPreferences mSharedPreferences;
 	
+	public static final int IDM_COLOR_GROUP = 400; 
+	public static final int IDM_COLOR_RED = 401; 
+	public static final int IDM_COLOR_GREEN = 402; 
+	public static final int IDM_COLOR_BLUE = 403; 
+	
+	private MenuItem  miFile1;
+	private MenuItem  miFile2;
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
+		//MenuItem item = menu.add(0, IDM_COLOR_RED, 0, "Bold");
+		miFile1 = menu.findItem(R.id.file1);
+		miFile1.setCheckable(true); 	
+		miFile2 = menu.findItem(R.id.file2);
+		miFile2.setCheckable(true); 
+		
+		SubMenu subMenuColor = menu.addSubMenu("Цвет"); 
+		subMenuColor.add(IDM_COLOR_GROUP, IDM_COLOR_RED, Menu.NONE, "Красный"); 
+		subMenuColor.add(IDM_COLOR_GROUP, IDM_COLOR_GREEN, Menu.NONE,"Зеленый"); 
+		subMenuColor.add(IDM_COLOR_GROUP, IDM_COLOR_BLUE, Menu.NONE, "Синий"); 
+		subMenuColor.setGroupCheckable(IDM_COLOR_GROUP, true, false); 
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if(item.getItemId() == R.id.file1)
+		{
+			item.setChecked(!item.isChecked());
+			miFile2.setChecked(!item.isChecked());
+			FILENAME_SD = "file1";
+			readTable();
+		}
+		if(item.getItemId() == R.id.file2)
+		{
+			item.setChecked(!item.isChecked());
+			miFile1.setChecked(!item.isChecked());
+			FILENAME_SD = "file2";
+			readTable();
+		}
+		
+		if(item.getItemId() == IDM_COLOR_RED)
+		{
+			item.setChecked(!item.isChecked());
+			miFile1.setChecked(!item.isChecked());
+			FILENAME_SD = "file2";
+			readTable();
+		}
+		
+		if(item.getItemId() == IDM_COLOR_GREEN)
+		{
+			item.setChecked(!item.isChecked());
+			miFile1.setChecked(!item.isChecked());
+			FILENAME_SD = "file2";
+			readTable();
+		}
+			
+		//Toast.makeText(this,"menu "+item.getItemId(), Toast.LENGTH_LONG).show();
+		return super.onOptionsItemSelected(item);
 	}
 	
     @Override

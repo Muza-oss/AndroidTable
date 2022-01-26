@@ -23,7 +23,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:id="@+id/tableLayout"
-				android:background="@color/tablelayoutBackground"
+				android:background="#FFA17AC1"
 				android:gravity="center"/>
 
 		</ScrollView>
